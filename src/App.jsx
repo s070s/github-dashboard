@@ -2,11 +2,11 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SearchComponent from "./components/SearchComponent";
 import ProfilePage from "./pages/ProfilePage";
+import RepositoriesPage from "./pages/RepositoriesPage";
 
 {
   /* 
   Todo
-import RepositoriesPage from "./pages/RepositoriesPage";
 import FollowersPage from "./pages/FollowersPage";
   
   */
@@ -19,9 +19,9 @@ function App() {
         <SearchComponent />
         <Routes>
           <Route path="/" element={<ProfilePage />} />
+          <Route path="/repos" element={<RepositoriesPage />} />
           {/* 
           Todo
-          <Route path="/repos" element={<RepositoriesPage />} />
           <Route path="/followers" element={<FollowersPage />} />
           */}
         </Routes>

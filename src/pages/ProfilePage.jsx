@@ -1,7 +1,7 @@
-// pages/ProfilePage.jsx
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchUserProfile } from "../api/github";
+import { Link } from "react-router-dom";
 
 function ProfilePage() {
   const [searchParams] = useSearchParams();
@@ -63,7 +63,9 @@ function ProfilePage() {
           <h5>{userData.name || userData.login}</h5>
           <p>{userData.bio}</p>
           <p>
-            <strong>Public Repos:</strong> {userData.public_repos} &nbsp;
+            <strong>Public Repos:</strong>{" "}
+            <Link to={`/repos?user=${username}`}>{userData.public_repos}</Link>
+            &nbsp;
             <strong>Followers:</strong> {userData.followers}
           </p>
           <a href={userData.html_url} target="_blank" rel="noreferrer">

@@ -5,6 +5,34 @@
   text-align: center;
 }
 
+.repo-title {
+  transition: transform 0.2s ease-in-out;
+  display: inline-block;
+}
+
+.repo-title:hover {
+  transform: scale(1.3);
+}
+
+.username-title {
+  transition: transform 0.2s ease-in-out;
+  display: inline-block;
+}
+
+.username-title:hover {
+  transform: scale(1.3);
+}
+
+.heading-container {
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+}
+
+.heading-container:hover {
+  transform: scale(1.3);
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
