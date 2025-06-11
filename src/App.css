@@ -12,6 +12,7 @@
 
 .repo-title:hover {
   transform: scale(1.3);
+  -webkit-text-fill-color: #2f70ff;
 }
 
 .username-title {
@@ -20,17 +21,8 @@
 }
 
 .username-title:hover {
-  transform: scale(1.3);
-}
-
-.heading-container {
-  transition: transform 0.2s ease-in-out;
-  display: flex;
-  align-items: center;
-}
-
-.heading-container:hover {
-  transform: scale(1.3);
+  transform: scale(0.85);
+  -webkit-text-fill-color: #2f70ff;
 }
 
 .logo {
