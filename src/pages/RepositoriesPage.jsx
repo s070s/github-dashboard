@@ -12,9 +12,6 @@ function RepositoriesPage() {
   const [loading, setLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const reposPerPage = 10;
-
   useEffect(() => {
     if (!username) return;
     setLoading(true);
@@ -31,20 +28,12 @@ function RepositoriesPage() {
       });
   }, [username]);
 
-  const indexOfLastRepo = currentPage * reposPerPage;
-  const indexOfFirstRepo = indexOfLastRepo - reposPerPage;
-
   //stargazers_count is a Github API field that indicates the no of stars of a repository
   const sortedRepos = [...repos].sort((a, b) => {
     return sortOrder === "asc"
       ? a.stargazers_count - b.stargazers_count
       : b.stargazers_count - a.stargazers_count;
   });
-
-  const currentRepos = sortedRepos.slice(indexOfFirstRepo, indexOfLastRepo);
-  const totalPages = Math.ceil(repos.length / reposPerPage);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   if (!username) {
     return <p>No user selected</p>;
@@ -98,7 +87,7 @@ function RepositoriesPage() {
 
           <div className="card shadow-sm">
             <div className="list-group list-group-flush">
-              {currentRepos.map((repo) => (
+              {sortedRepos.map((repo) => (
                 <div
                   key={repo.id}
                   className="list-group-item list-group-item-action p-4 hover-bg-light"
@@ -128,53 +117,6 @@ function RepositoriesPage() {
               ))}
             </div>
           </div>
-
-          {/* Add Pagination */}
-          {repos.length > 0 && (
-            <nav className="mt-5">
-              <ul className="pagination justify-content-center">
-                <li
-                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => paginate(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    <i className="fas fa-chevron-left"></i>
-                  </button>
-                </li>
-                {[...Array(totalPages)].map((_, index) => (
-                  <li
-                    key={index + 1}
-                    className={`page-item ${
-                      currentPage === index + 1 ? "active" : ""
-                    }`}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => paginate(index + 1)}
-                    >
-                      {index + 1}
-                    </button>
-                  </li>
-                ))}
-                <li
-                  className={`page-item ${
-                    currentPage === totalPages ? "disabled" : ""
-                  }`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => paginate(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    <i className="fas fa-chevron-right"></i>
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          )}
 
           {/* Empty State */}
           {repos.length === 0 && !loading && (

@@ -9,8 +9,6 @@ function FollowersPage() {
   const username = searchParams.get("user");
   const [followers, setFollowers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const followersPerPage = 10;
 
   useEffect(() => {
     if (!username) return;
@@ -18,7 +16,6 @@ function FollowersPage() {
     fetchUserFollowers(username)
       .then((response) => {
         setFollowers(response.data);
-        setCurrentPage(1); // Reset to first page when loading new user
       })
       .catch((error) => {
         toast.error("Error getting user followers");
@@ -29,17 +26,6 @@ function FollowersPage() {
         setLoading(false);
       });
   }, [username]);
-
-  // Get current followers
-  const indexOfLastFollower = currentPage * followersPerPage;
-  const indexOfFirstFollower = indexOfLastFollower - followersPerPage;
-  const currentFollowers = followers.slice(
-    indexOfFirstFollower,
-    indexOfLastFollower
-  );
-  const totalPages = Math.ceil(followers.length / followersPerPage);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   if (!username) {
     return <p>No user selected</p>;
@@ -85,7 +71,7 @@ function FollowersPage() {
           {/* Followers List */}
           <div className="card shadow-sm">
             <div className="list-group list-group-flush">
-              {currentFollowers.map((follower) => (
+              {followers.map((follower) => (
                 <div
                   key={follower.id}
                   className="list-group-item list-group-item-action p-4"
@@ -125,53 +111,6 @@ function FollowersPage() {
               ))}
             </div>
           </div>
-
-          {/* Pagination */}
-          {followers.length > 0 && (
-            <nav className="mt-5">
-              <ul className="pagination justify-content-center">
-                <li
-                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => paginate(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    <i className="fas fa-chevron-left"></i>
-                  </button>
-                </li>
-                {[...Array(totalPages)].map((_, index) => (
-                  <li
-                    key={index + 1}
-                    className={`page-item ${
-                      currentPage === index + 1 ? "active" : ""
-                    }`}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => paginate(index + 1)}
-                    >
-                      {index + 1}
-                    </button>
-                  </li>
-                ))}
-                <li
-                  className={`page-item ${
-                    currentPage === totalPages ? "disabled" : ""
-                  }`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => paginate(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    <i className="fas fa-chevron-right"></i>
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          )}
 
           {/* Empty State */}
           {followers.length === 0 && !loading && (
