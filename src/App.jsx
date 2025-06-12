@@ -18,7 +18,7 @@ function App() {
       <div className="container mt-4">
         <SearchComponent />
         <Routes>
-          <Route path="/" element={<ProfilePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/repos" element={<RepositoriesPage />} />
           {/* 
           Todo

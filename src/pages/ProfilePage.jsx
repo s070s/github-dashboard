@@ -1,53 +1,18 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { fetchUserProfile } from "../api/github";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams, useLocation } from "react-router-dom";
 
 function ProfilePage() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const username = searchParams.get("user");
 
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (!username) return;
-
-    setLoading(true);
-    setError(null);
-
-    fetchUserProfile(username)
-      .then((response) => {
-        setUserData(response.data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError("User not found or API error.");
-        setUserData(null);
-        setLoading(false);
-      });
-  }, [username]);
-
-  if (!username) {
+  if (!location.state?.userData) {
     return (
       <p className="text-muted">
-        Search for a GitHub user to see their profile.
+        No profile data found. Please search for a GitHub user first.
       </p>
     );
   }
-
-  if (loading) {
-    return <p>Loading profile...</p>;
-  }
-
-  if (error) {
-    return <p className="text-danger">{error}</p>;
-  }
-
-  if (!userData) {
-    return null; // avoid rendering before data is set
-  }
+  const userData = location.state.userData;
 
   return (
     <div className="card">

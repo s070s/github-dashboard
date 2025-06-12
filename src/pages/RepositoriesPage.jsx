@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchUserRepositories } from "../api/github";
+import { toast } from "react-toastify";
 
 function RepositoriesPage() {
   const [searchParams] = useSearchParams();
@@ -8,13 +9,11 @@ function RepositoriesPage() {
 
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     if (!username) return;
     setLoading(true);
-    setError(null);
 
     fetchUserRepositories(username)
       .then((response) => {
@@ -22,7 +21,7 @@ function RepositoriesPage() {
         setLoading(false);
       })
       .catch(() => {
-        setError("Error fetching repositories.");
+        toast.error("Error getting user repositories");
         setRepos([]);
         setLoading(false);
       });
@@ -41,10 +40,6 @@ function RepositoriesPage() {
 
   if (loading) {
     return <p>Loading repositories...</p>;
-  }
-
-  if (error) {
-    return <p className="text-danger">{error}</p>;
   }
 
   return (

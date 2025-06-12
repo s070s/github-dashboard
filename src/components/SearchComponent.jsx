@@ -1,20 +1,41 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchUserProfile } from "../api/github";
+import { toast } from "react-toastify";
 
 function SearchComponent() {
   const [username, setUsername] = useState("");
-  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username.trim()) {
-      setError("Please enter a username");
+      toast.error("Please enter a username");
       return;
     }
-    setError(null);
-    navigate(`/?user=${encodeURIComponent(username.trim())}`);
+
+    const trimmedUsername = username.trim();
+    if (!trimmedUsername) return;
+    setIsLoading(true);
+    fetchUserProfile(trimmedUsername)
+      .then((response) => {
+        if (response.status === 200) {
+          navigate(`/profile?user=${encodeURIComponent(trimmedUsername)}`, {
+            state: { userData: response.data },
+          });
+        } else {
+          toast.error("User not found");
+        }
+      })
+      .catch(() => {
+        toast.error("Error fetching user profile");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
+
   return (
     <form className="mb-4" onSubmit={handleSubmit}>
       <div className="input-group">
@@ -25,11 +46,10 @@ function SearchComponent() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <button type="submit" className="btn btn-primary">
-          Search
+        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+          {isLoading ? "Searching..." : "Search"}
         </button>
       </div>
-      {error && <div className="text-danger mt-2">{error}</div>}
     </form>
   );
 }
