@@ -21,7 +21,7 @@ function SearchComponent() {
     fetchUserProfile(trimmedUsername)
       .then((response) => {
         if (response.status === 200) {
-          navigate(`/profile?user=${encodeURIComponent(trimmedUsername)}`, {
+          navigate(`/?user=${encodeURIComponent(trimmedUsername)}`, {
             state: { userData: response.data },
           });
         } else {

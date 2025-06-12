@@ -11,7 +11,7 @@ function App() {
       <div className="container mt-4">
         <SearchComponent />
         <Routes>
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/" element={<ProfilePage />} />
           <Route path="/repos" element={<RepositoriesPage />} />
           <Route path="/followers" element={<FollowersPage />} />
         </Routes>

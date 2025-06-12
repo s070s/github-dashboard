@@ -15,6 +15,16 @@
   -webkit-text-fill-color: #2f70ff;
 }
 
+.follower-title {
+  transition: transform 0.2s ease-in-out;
+  display: inline-block;
+}
+
+.follower-title:hover {
+  transform: scale(1.05);
+  -webkit-text-fill-color: #2f70ff;
+}
+
 .username-title {
   transition: transform 0.2s ease-in-out;
   display: inline-block;
