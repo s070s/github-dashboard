@@ -3,14 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SearchComponent from "./components/SearchComponent";
 import ProfilePage from "./pages/ProfilePage";
 import RepositoriesPage from "./pages/RepositoriesPage";
-
-{
-  /* 
-  Todo
 import FollowersPage from "./pages/FollowersPage";
-  
-  */
-}
 
 function App() {
   return (
@@ -20,10 +13,7 @@ function App() {
         <Routes>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/repos" element={<RepositoriesPage />} />
-          {/* 
-          Todo
           <Route path="/followers" element={<FollowersPage />} />
-          */}
         </Routes>
       </div>
     </BrowserRouter>

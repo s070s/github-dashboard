@@ -31,7 +31,8 @@ function ProfilePage() {
             <strong>Public Repos:</strong>{" "}
             <Link to={`/repos?user=${username}`}>{userData.public_repos}</Link>
             &nbsp;
-            <strong>Followers:</strong> {userData.followers}
+            <strong>Followers:</strong>
+            <Link to={`/followers?user=${username}`}>{userData.followers}</Link>
           </p>
           <a href={userData.html_url} target="_blank" rel="noreferrer">
             View on GitHub
