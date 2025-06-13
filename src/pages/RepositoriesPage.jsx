@@ -10,7 +10,6 @@ function RepositoriesPage() {
 
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     if (!username) return;
@@ -27,13 +26,6 @@ function RepositoriesPage() {
         setLoading(false);
       });
   }, [username]);
-
-  //stargazers_count is a Github API field that indicates the no of stars of a repository
-  const sortedRepos = [...repos].sort((a, b) => {
-    return sortOrder === "asc"
-      ? a.stargazers_count - b.stargazers_count
-      : b.stargazers_count - a.stargazers_count;
-  });
 
   if (!username) {
     return <p>No user selected</p>;
@@ -67,27 +59,11 @@ function RepositoriesPage() {
               <i className="fas fa-arrow-left me-2"></i>
               Start Over
             </button>
-
-            <div
-              className="d-inline-block ms-3 text-primary"
-              role="button"
-              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-            >
-              <i
-                className={`fas fa-sort-amount-${
-                  sortOrder === "asc" ? "up" : "down"
-                } me-2`}
-              ></i>
-              <span className="small">
-                Sort by Stars:{" "}
-                {sortOrder === "asc" ? "Ascending" : "Descending"}
-              </span>
-            </div>
           </div>
 
           <div className="card shadow-sm">
             <div className="list-group list-group-flush">
-              {sortedRepos.map((repo) => (
+              {repos.map((repo) => (
                 <div
                   key={repo.id}
                   className="list-group-item list-group-item-action p-4 hover-bg-light"
