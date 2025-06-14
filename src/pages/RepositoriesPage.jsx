@@ -63,11 +63,12 @@ function RepositoriesPage() {
     fetchUserRepositories(username)
       .then((response) => {
         setRepos(response || []);
-        setLoading(false);
       })
       .catch(() => {
         toast.error("Error getting user repositories");
         setRepos([]);
+      })
+      .finally(() => {
         setLoading(false);
       });
   }, [username]);
