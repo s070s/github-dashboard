@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { fetchUserRepositories } from "../api/github";
 import { toast } from "react-toastify";
+import { getPageRange, calculatePagination } from "../utilities/pagination";
 
 function RepositoriesPage() {
   const [searchParams] = useSearchParams();
@@ -28,10 +29,11 @@ function RepositoriesPage() {
   {
     /* Pagination Handling */
   }
-  const indexOfLastRepo = currentPage * itemsPerPage;
-  const indexOfFirstRepo = indexOfLastRepo - itemsPerPage;
-  const currentRepos = sortedRepos.slice(indexOfFirstRepo, indexOfLastRepo);
-  const totalPages = Math.ceil(sortedRepos.length / itemsPerPage);
+  const { currentItems: currentRepos, totalPages } = calculatePagination(
+    sortedRepos,
+    currentPage,
+    itemsPerPage
+  );
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -193,21 +195,30 @@ function RepositoriesPage() {
                     </button>
                   </li>
 
-                  {[...Array(totalPages)].map((_, index) => (
-                    <li
-                      key={index + 1}
-                      className={`page-item ${
-                        currentPage === index + 1 ? "active" : ""
-                      }`}
-                    >
-                      <button
-                        className="page-link"
-                        onClick={() => handlePageChange(index + 1)}
+                  {getPageRange(currentPage, totalPages).map((page, index) =>
+                    page === "..." ? (
+                      <li
+                        key={`ellipsis-${index}`}
+                        className="page-item disabled"
                       >
-                        {index + 1}
-                      </button>
-                    </li>
-                  ))}
+                        <span className="page-link">...</span>
+                      </li>
+                    ) : (
+                      <li
+                        key={page}
+                        className={`page-item ${
+                          currentPage === page ? "active" : ""
+                        }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageChange(page)}
+                        >
+                          {page}
+                        </button>
+                      </li>
+                    )
+                  )}
 
                   <li
                     className={`page-item ${
