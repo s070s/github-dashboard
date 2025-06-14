@@ -11,13 +11,31 @@ function RepositoriesPage() {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [sortDirection, setSortDirection] = useState("desc");
+
+  {
+    /* Client Side Sorting */
+  }
+  const sortedRepos = [...repos].sort((a, b) => {
+    return sortDirection === "desc"
+      ? b.stargazers_count - a.stargazers_count
+      : a.stargazers_count - b.stargazers_count;
+  });
+
+  const toggleSort = () => {
+    setSortDirection((prev) => (prev === "desc" ? "asc" : "desc"));
+  };
+
   useEffect(() => {
-    if (!username) return;
+    if (!username) {
+      setRepos([]);
+      return;
+    }
     setLoading(true);
 
     fetchUserRepositories(username)
       .then((response) => {
-        setRepos(response.data);
+        setRepos(response || []);
         setLoading(false);
       })
       .catch(() => {
@@ -61,36 +79,55 @@ function RepositoriesPage() {
             </button>
           </div>
 
+          {/* Sorting Button */}
+          {repos.length > 0 && (
+            <div className="d-flex justify-content-end mb-3">
+              <button
+                className="btn btn-outline-secondary btn-sm"
+                onClick={toggleSort}
+              >
+                <i className="fas fa-star me-1"></i>
+                Sort by stars
+                {sortDirection === "desc" ? (
+                  <i className="fas fa-sort-down ms-1"></i>
+                ) : (
+                  <i className="fas fa-sort-up ms-1"></i>
+                )}
+              </button>
+            </div>
+          )}
+
           <div className="card shadow-sm">
             <div className="list-group list-group-flush">
-              {repos.map((repo) => (
-                <div
-                  key={repo.id}
-                  className="list-group-item list-group-item-action p-4 hover-bg-light"
-                >
-                  <div className="d-flex justify-content-between align-items-center">
-                    <h5 className="mb-1">
-                      <a
-                        href={repo.html_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-decoration-none text-dark"
-                      >
-                        {repo.name}
-                      </a>
-                    </h5>
-                    <span className="badge bg-warning text-dark rounded-pill">
-                      <i className="fas fa-star me-1"></i>
-                      {repo.stargazers_count}
-                    </span>
+              {sortedRepos &&
+                sortedRepos.map((repo) => (
+                  <div
+                    key={repo.id}
+                    className="list-group-item list-group-item-action p-4 hover-bg-light"
+                  >
+                    <div className="d-flex justify-content-between align-items-center">
+                      <h5 className="mb-1">
+                        <a
+                          href={repo.html_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-decoration-none text-dark"
+                        >
+                          {repo.name}
+                        </a>
+                      </h5>
+                      <span className="badge bg-warning text-dark rounded-pill">
+                        <i className="fas fa-star me-1"></i>
+                        {repo.stargazers_count}
+                      </span>
+                    </div>
+                    {repo.description && (
+                      <p className="text-muted mb-0 small mt-2">
+                        {repo.description}
+                      </p>
+                    )}
                   </div>
-                  {repo.description && (
-                    <p className="text-muted mb-0 small mt-2">
-                      {repo.description}
-                    </p>
-                  )}
-                </div>
-              ))}
+                ))}
             </div>
           </div>
 
