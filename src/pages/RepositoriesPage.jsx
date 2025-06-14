@@ -14,7 +14,7 @@ function RepositoriesPage() {
   const [sortDirection, setSortDirection] = useState("desc");
 
   {
-    /* Client Side Sorting */
+    /* Client Side Sorting Functions */
   }
   const sortedRepos = [...repos].sort((a, b) => {
     return sortDirection === "desc"
@@ -25,7 +25,9 @@ function RepositoriesPage() {
   const toggleSort = () => {
     setSortDirection((prev) => (prev === "desc" ? "asc" : "desc"));
   };
-
+  {
+    /* Lifecycle,Api Call */
+  }
   useEffect(() => {
     if (!username) {
       setRepos([]);
@@ -45,6 +47,9 @@ function RepositoriesPage() {
       });
   }, [username]);
 
+  {
+    /* Markup */
+  }
   if (!username) {
     return <p>No user selected</p>;
   }
@@ -55,6 +60,7 @@ function RepositoriesPage() {
 
   return (
     <div className="container py-5">
+      {/* Title */}
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="text-center mb-5">
@@ -96,7 +102,7 @@ function RepositoriesPage() {
               </button>
             </div>
           )}
-
+          {/* List of Repositories */}
           <div className="card shadow-sm">
             <div className="list-group list-group-flush">
               {sortedRepos &&
