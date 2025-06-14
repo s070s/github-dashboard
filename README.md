@@ -11,8 +11,8 @@ so i get everything and sort/paginate in the client
 
 ## Installation Instructions
 
-1.Install Node.js (my current version is 22.15.1)
-2.Clone this repository
-3.Open a terminal and navigate in the project folder cd (path)
-4.input 'npm install' to install dependencies listed in the packages.json file
-5.input npm run dev to Start the client.
+1.Install Node.js (my current version is 22.15.1)<br>
+2.Clone this repository<br>
+3.Open a terminal and navigate in the project folder cd (path)<br>
+4.input 'npm install' to install dependencies listed in the packages.json file<br>
+5.input npm run dev to Start the client.<br>
