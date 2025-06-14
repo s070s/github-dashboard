@@ -13,8 +13,11 @@ function RepositoriesPage() {
 
   const [sortDirection, setSortDirection] = useState("desc");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
   {
-    /* Client Side Sorting Functions */
+    /* Client Side Sorting*/
   }
   const sortedRepos = [...repos].sort((a, b) => {
     return sortDirection === "desc"
@@ -22,9 +25,29 @@ function RepositoriesPage() {
       : a.stargazers_count - b.stargazers_count;
   });
 
+  {
+    /* Pagination Handling */
+  }
+  const indexOfLastRepo = currentPage * itemsPerPage;
+  const indexOfFirstRepo = indexOfLastRepo - itemsPerPage;
+  const currentRepos = sortedRepos.slice(indexOfFirstRepo, indexOfLastRepo);
+  const totalPages = Math.ceil(sortedRepos.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleItemsPerPageChange = (event) => {
+    setItemsPerPage(parseInt(event.target.value));
+    setCurrentPage(1); // Reset to first page when changing items per page
+  };
+  {
+    /* Toggle Sort */
+  }
   const toggleSort = () => {
     setSortDirection((prev) => (prev === "desc" ? "asc" : "desc"));
   };
+
   {
     /* Lifecycle,Api Call */
   }
@@ -105,8 +128,8 @@ function RepositoriesPage() {
           {/* List of Repositories */}
           <div className="card shadow-sm">
             <div className="list-group list-group-flush">
-              {sortedRepos &&
-                sortedRepos.map((repo) => (
+              {currentRepos &&
+                currentRepos.map((repo) => (
                   <div
                     key={repo.id}
                     className="list-group-item list-group-item-action p-4 hover-bg-light"
@@ -136,6 +159,73 @@ function RepositoriesPage() {
                 ))}
             </div>
           </div>
+
+          {/* Pagination Controls */}
+          {repos.length > 0 && (
+            <div className="d-flex justify-content-between align-items-center mt-4">
+              <div className="d-flex align-items-center">
+                <label className="me-2">Items per page:</label>
+                <select
+                  className="form-select form-select-sm w-auto"
+                  value={itemsPerPage}
+                  onChange={handleItemsPerPageChange}
+                >
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="200">200</option>
+                </select>
+              </div>
+
+              <nav aria-label="Repository pagination">
+                <ul className="pagination mb-0">
+                  <li
+                    className={`page-item ${
+                      currentPage === 1 ? "disabled" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </button>
+                  </li>
+
+                  {[...Array(totalPages)].map((_, index) => (
+                    <li
+                      key={index + 1}
+                      className={`page-item ${
+                        currentPage === index + 1 ? "active" : ""
+                      }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(index + 1)}
+                      >
+                        {index + 1}
+                      </button>
+                    </li>
+                  ))}
+
+                  <li
+                    className={`page-item ${
+                      currentPage === totalPages ? "disabled" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          )}
 
           {/* Empty State */}
           {repos.length === 0 && !loading && (
