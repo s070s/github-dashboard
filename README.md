@@ -1,13 +1,20 @@
 # Technical Choices
 
--Vite as it is lighter for small frontend projects compared to Next.js<br>
--React Router DOM for Routing<br>
--Axios for easier API Consuming,automatic json parsing, it could be omitted as it is an extra dependency on the project but it this is a small test project of 3 pages<br>
+-Vite for fast builds,hot reload<br>
+-Axios for easier API Consuming,automatic json parsing<br>
 -Bootstrap for ready made CSS classes<br>
+-Toastify for User Toast messages for errors<br>
 
 ## Issues
 Querying Github to get results sorted by stars is not possible<br>
 so i get everything and sort/paginate in the client
+
+## Time spent
+10/6 1 hour
+11/6 1 hour 
+12/6 4 hours 
+13/6 4 hours 
+14/6 1:30 hours
 
 ## Installation Instructions
 
