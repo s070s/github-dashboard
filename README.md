@@ -15,6 +15,7 @@ so i get everything and sort/paginate in the client
 12/6 4 hours<br>
 13/6 4 hours<br>
 14/6 1:30 hours<br>
+16/6 2:10 hours<br>
 
 ## Installation Instructions
 
