@@ -10,11 +10,11 @@ Querying Github to get results sorted by stars is not possible<br>
 so i get everything and sort/paginate in the client
 
 ## Time spent
-10/6 1 hour
-11/6 1 hour 
-12/6 4 hours 
-13/6 4 hours 
-14/6 1:30 hours
+10/6 1 hour<br>
+11/6 1 hour<br>
+12/6 4 hours<br>
+13/6 4 hours<br>
+14/6 1:30 hours<br>
 
 ## Installation Instructions
 
