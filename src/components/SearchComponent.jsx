@@ -8,18 +8,22 @@ function SearchComponent() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Submit form
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!username.trim()) {
+    e.preventDefault(); // Do not reload the page
+
+    // Validation for empty username
+    const trimmedUsername = username.trim();
+    if (!trimmedUsername) {
       toast.error("Please enter a username");
       return;
     }
-
-    const trimmedUsername = username.trim();
-    if (!trimmedUsername) return;
     setIsLoading(true);
+
+    // Call to the API
     fetchUserProfile(trimmedUsername)
       .then((response) => {
+        //If successful(200), navigate to the user profile page
         if (response.status === 200) {
           navigate(`/?user=${encodeURIComponent(trimmedUsername)}`, {
             state: { userData: response.data },
@@ -29,6 +33,7 @@ function SearchComponent() {
         }
       })
       .catch(() => {
+        // Error if API call fails
         toast.error("Error fetching user profile");
       })
       .finally(() => {
@@ -38,6 +43,7 @@ function SearchComponent() {
 
   return (
     <form className="mb-4" onSubmit={handleSubmit}>
+      {/* Username input field */}
       <div className="input-group">
         <input
           type="text"
@@ -46,6 +52,7 @@ function SearchComponent() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
+        {/* Submit button*/}
         <button type="submit" className="btn btn-primary" disabled={isLoading}>
           {isLoading ? "Searching..." : "Search"}
         </button>

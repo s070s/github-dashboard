@@ -1,9 +1,7 @@
-import { Link, useSearchParams, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function ProfilePage() {
-  const [searchParams] = useSearchParams();
   const location = useLocation();
-  const username = searchParams.get("user");
 
   if (!location.state?.userData) {
     return (
@@ -13,6 +11,7 @@ function ProfilePage() {
     );
   }
   const userData = location.state.userData;
+  const username = userData.login;
 
   return (
     <div className="card">
