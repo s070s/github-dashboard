@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { fetchUserFollowers } from "../api/github";
 import { calculatePagination } from "../utilities/pagination";
+import Pager from "../components/Pager";
 
 function FollowersPage() {
   const [searchParams] = useSearchParams();
@@ -26,10 +27,6 @@ function FollowersPage() {
     setCurrentPage(pageNumber);
   };
 
-  const handleItemsPerPageChange = (event) => {
-    setItemsPerPage(parseInt(event.target.value));
-    setCurrentPage(1); // Reset to first page when changing items per page
-  };
   {
     /* Lifecycle,Api Call */
   }
@@ -46,9 +43,29 @@ function FollowersPage() {
         setFollowers(response || []);
       })
       .catch((error) => {
-        toast.error("Error getting user followers");
+        {
+          /*API Error Handling*/
+        }
         setFollowers([]);
-        console.error(error);
+        switch (error.response?.status) {
+          case 401:
+            toast.error("Unauthorized");
+            break;
+          case 403:
+            toast.error("Forbidden: You may have exceeded the rate limit");
+            break;
+          case 404:
+            toast.error(`Followers not found`);
+            break;
+          case 429:
+            toast.error("Rate limit exceeded. Please try again later");
+            break;
+          case 500:
+            toast.error("Unexpected server error. Please try again later");
+            break;
+          default:
+            toast.error("Error fetching followers");
+        }
       })
       .finally(() => {
         setLoading(false);
@@ -143,59 +160,16 @@ function FollowersPage() {
 
           {/* Pagination Controls */}
           {currentFollowers.length > 0 && (
-            <div className="d-flex justify-content-between align-items-center mt-4">
-              <div className="d-flex align-items-center">
-                <label className="me-2">Items per page:</label>
-                <select
-                  className="form-select form-select-sm w-auto"
-                  value={itemsPerPage}
-                  onChange={handleItemsPerPageChange}
-                >
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                  <option value="200">200</option>
-                </select>
-              </div>
-
-              <nav aria-label="Follower pagination">
-                <ul className="pagination mb-0">
-                  <li
-                    className={`page-item ${
-                      currentPage === 1 ? "disabled" : ""
-                    }`}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                    >
-                      Previous
-                    </button>
-                  </li>
-
-                  <li className="page-item disabled">
-                    <span className="page-link">
-                      Page {currentPage} of {totalPages}
-                    </span>
-                  </li>
-
-                  <li
-                    className={`page-item ${
-                      currentPage === totalPages ? "disabled" : ""
-                    }`}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                    >
-                      Next
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </div>
+            <Pager
+              currentPage={currentPage}
+              totalPages={totalPages}
+              itemsPerPage={itemsPerPage}
+              onPageChange={handlePageChange}
+              onItemsPerPageChange={(value) => {
+                setItemsPerPage(value);
+                setCurrentPage(1);
+              }}
+            />
           )}
 
           {/* Empty State */}

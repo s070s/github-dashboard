@@ -1,7 +1,6 @@
 import axios from "axios";
 
 /*Base Url for API Calls*/
-
 const BASE_URL = "https://api.github.com/users";
 
 // Fetch a User

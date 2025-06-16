@@ -28,13 +28,31 @@ function SearchComponent() {
           navigate(`/?user=${encodeURIComponent(trimmedUsername)}`, {
             state: { userData: response.data },
           });
-        } else {
-          toast.error("User not found");
         }
       })
-      .catch(() => {
-        // Error if API call fails
-        toast.error("Error fetching user profile");
+      .catch((error) => {
+        {
+          /*API Error Handling*/
+        }
+        switch (error.response?.status) {
+          case 401:
+            toast.error("Unauthorized");
+            break;
+          case 403:
+            toast.error("Forbidden: You may have exceeded the rate limit");
+            break;
+          case 404:
+            toast.error(`User ${username} not found`);
+            break;
+          case 429:
+            toast.error("Rate limit exceeded. Please try again later");
+            break;
+          case 500:
+            toast.error("Unexpected server error. Please try again later");
+            break;
+          default:
+            toast.error("Error fetching user profile");
+        }
       })
       .finally(() => {
         setIsLoading(false);
