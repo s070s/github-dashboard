@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { fetchUserFollowers } from "../api/github";
-import { getPageRange, calculatePagination } from "../utilities/pagination";
+import { calculatePagination } from "../utilities/pagination";
 
 function FollowersPage() {
   const [searchParams] = useSearchParams();
@@ -11,7 +11,7 @@ function FollowersPage() {
   const [followers, setFollowers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
 
   {
     /* Pagination Handling */
@@ -174,30 +174,11 @@ function FollowersPage() {
                     </button>
                   </li>
 
-                  {getPageRange(currentPage, totalPages).map((page, index) =>
-                    page === "..." ? (
-                      <li
-                        key={`ellipsis-${index}`}
-                        className="page-item disabled"
-                      >
-                        <span className="page-link">...</span>
-                      </li>
-                    ) : (
-                      <li
-                        key={page}
-                        className={`page-item ${
-                          currentPage === page ? "active" : ""
-                        }`}
-                      >
-                        <button
-                          className="page-link"
-                          onClick={() => handlePageChange(page)}
-                        >
-                          {page}
-                        </button>
-                      </li>
-                    )
-                  )}
+                  <li className="page-item disabled">
+                    <span className="page-link">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                  </li>
 
                   <li
                     className={`page-item ${
