@@ -7,7 +7,7 @@
 
 ## Issues
 Querying Github to get results sorted by stars is not possible<br>
-so i get everything and sort/paginate in the client
+so i get everything and sort/paginate in the client<br>
 
 ## Time spent
 10/6 1 hour<br>
