@@ -7,7 +7,7 @@
 
 ## Issues
 I couldnt query github to get a sorted and paginated list of repositories<br>
-so i gott everything and sorted/paginated in the client<br>
+so i got everything and sorted/paginated in the client<br>
 
 ## Time spent
 10/6 1 hour<br>
